@@ -17,7 +17,7 @@ library(tidyr)
 library(purrr)
 library(sf)
 library(ggplot2)
-library(rnaturalearth)
+# library(rnaturalearth)
 library(echarts4r)
 
 
@@ -64,12 +64,18 @@ get_forecast <- function(city = "Freiburg") {
 
 # Initialisation ----------------------------------------------------------
 # Contour of Germany
-sh_ger <- rnaturalearth::ne_countries(scale = 50) |>
-  filter(name == "Germany")
+
+# sh_ger <- rnaturalearth::ne_countries(scale = 50) |>
+#   filter(name == "Germany")
+
+sh_ger <- read_sf("./data/sh_ger.shp")
 
 # Rivers in Germany
-rivers <- ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical") |>
-  st_intersection(sh_ger)
+
+# rivers <- ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical") |>
+#   st_intersection(sh_ger)
+
+rivers <- read_sf("./data/rivers.shp")
 
 # Shiny-UI ----------------------------------------------------------------
 # Define UI for application
@@ -80,6 +86,7 @@ ui <- fluidPage(
   # Sidebar
   sidebarLayout(
     sidebarPanel(
+      style = "position:fixed;width:inherit;",
       titlePanel("Temperaturen in Deutschland"),
       # Button to reload the actual temperature
       actionButton("reload", label = "Aktualisieren"),
@@ -108,8 +115,12 @@ ui <- fluidPage(
 
     # Map of cities
     mainPanel(
+      h3("   Aktuelle Temperatur:" ),
       plotOutput("map"),
-      echarts4rOutput("forecast")
+      hr(),
+      h3("   Vorhersage:"),
+      echarts4rOutput("forecast"),
+      hr()
     )
   )
 )
