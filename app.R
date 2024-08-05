@@ -77,31 +77,36 @@ sh_ger <- read_sf("./data/sh_ger.shp")
 
 rivers <- read_sf("./data/rivers.shp")
 
+# Cities to choose
+cities <- list(
+  "Berlin" = "Berlin", "Bremen" = "Bremen", "Dresden" = "Dresden",
+  "Düsseldorf" = "Düsseldorf", "Erfurt" = "Erfurt", "Freiburg" = "Freiburg",
+  "Hamburg" = "Hamburg", "Hannover" = "Hannover", "Kiel" = "Kiel",
+  "Köln" = "Köln", "Lahr" = "Lahr", "Magdeburg" = "Magdeburg",
+  "Mainz" = "Mainz", "München" = "Munich", "Potsdam" = "Potsdam",
+  "Saarbrücken" = "Saarbrücken", "Schwerin" = "Schwerin",
+  "Stuttgart" = "Stuttgart", "Wiesbaden" = "Wiesbaden"
+)
+
 # Shiny-UI ----------------------------------------------------------------
 # Define UI for application
 ui <- fluidPage(
+  
   useShinyjs(),
+  
   theme = bs_theme(preset = "minty"),
 
   # Sidebar
   sidebarLayout(
     sidebarPanel(
-      style = "position:fixed;width:inherit;",
+      style = "position: center; max-height: 100%",
       titlePanel("Temperaturen in Deutschland"),
       # Button to reload the actual temperature
       actionButton("reload", label = "Aktualisieren"),
       hr(),
       selectInput("select",
         label = h3("Vorhersage für:"),
-        choices = list(
-          "Berlin" = "Berlin", "Bremen" = "Bremen", "Dresden" = "Dresden",
-          "Düsseldorf" = "Düsseldorf", "Erfurt" = "Erfurt", "Freiburg" = "Freiburg",
-          "Hamburg" = "Hamburg", "Hannover" = "Hannover", "Kiel" = "Kiel",
-          "Köln" = "Köln", "Lahr" = "Lahr", "Magdeburg" = "Magdeburg",
-          "Mainz" = "Mainz", "München" = "Munich", "Potsdam" = "Potsdam",
-          "Saarbrücken" = "Saarbrücken", "Schwerin" = "Schwerin",
-          "Stuttgart" = "Stuttgart", "Wiesbaden" = "Wiesbaden"
-        ),
+        choices = cities,
         selected = "Freiburg"
       ),
       hr(),
@@ -115,10 +120,10 @@ ui <- fluidPage(
 
     # Map of cities
     mainPanel(
-      h3("   Aktuelle Temperatur:" ),
+      h3("\tAktuelle Temperatur:" ),
       plotOutput("map"),
       hr(),
-      h3("   Vorhersage:"),
+      h3("\tVorhersage:"),
       echarts4rOutput("forecast"),
       hr()
     )
